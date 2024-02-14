@@ -293,7 +293,7 @@ def quantize(img, ask_for_dither: bool = True, dither: int = 0, open_image: bool
     new_image.save("Preview Image.png", format="PNG")
     return new_image
 
-def encode(img: Image, vertical_print: bool = False, dither_: bool = True) -> list[str] or None:
+def encode(img: Image, vertical_print: bool = False, dither_: bool = True):
     """
     Take an image and encode it into a list of {`MaxStringLength`}-char strings.
     ...[number of pixels][color]...
@@ -404,20 +404,23 @@ if option == 1:
 #inputing colors manually
 elif option == 2:
   count: int = len(SYMBOLS_LIST);
+  rgbString: str = "";
   print("Please enter colors in the format of \"(R,G,B)\",\npress enter to stop\n there currently is a max of 113 colors availible.");
   rrPalette = {};
   for i in SYMBOLS_LIST:
-    try:
-      print(f"{count} colors available...")
-      color = input("Enter a color: ");
-      if(color == ""): break
-      rrPalette[eval(color)] = i;
-      count -= 1; # count-- doesn't work for some rreason???
+    #try:
+    print(f"{count} colors available...")
+    color = input("Enter a color: ");
+    if(color == ""): break
+    rgbString += str(rgbToHex(eval(color))) + "\n";
+    rrPalette[eval(color)] = i;
+    --count; # count-- doesn't work for some reason???
+    with open("Hex Colors.txt", "w", encoding="UTF-8") as file:
+        file.write(rgbString);
     except:
-      print("""Error!! Please try restart the program and input the 
-            color values correctly, thank you.""");
-      time.sleep(4);
-      exit();
+        print("Error!! Please try restart the program and input the color values correctly, thank you.");
+        time.sleep(4);
+        exit();
 
 # use default colors.
 else: pass;
